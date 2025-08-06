@@ -12,10 +12,11 @@ window.onload = async () => {
       const apiUrl = `https://corsproxy.io/?https://script.google.com/macros/s/AKfycbz6ergFsT1BEmYxGZVJW7f8ucYyONFptyAFYzA0ppDSLoAJO-BlHBkBrtmCKnbt_qeH/exec?action=getUserInfo&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
       const res = await fetch(apiUrl);
   
-      const contentType = res.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new Error("Invalid response type");
-      }
+      // Google Apps Script 응답은 text/plain으로 올 수 있으므로 헤더 체크 제거
+      // const contentType = res.headers.get("content-type");
+      // if (!contentType || !contentType.includes("application/json")) {
+      //   throw new Error("Invalid response type");
+      // }
   
       const data = await res.json();
   
