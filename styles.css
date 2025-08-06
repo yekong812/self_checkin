@@ -120,11 +120,11 @@ input:focus {
 
 /* 정보 표시 영역 */
 .info {
-    background-color: #f8f9fa;
+    background-color: transparent;
     padding: 15px;
     border-radius: 10px;
     margin: 15px 0;
-    border-left: 4px solid #fbb757;
+    border: 2px solid #fbb757;
 }
 
 .info p {
