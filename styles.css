@@ -265,4 +265,45 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+/* 로딩 스피너 */
+.loading {
+    display: none;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #fbb757;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    margin-top: 8px;
+    color: #666;
+    font-size: 14px;
+}
+
+/* 버튼 비활성화 상태 */
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+button:disabled:hover {
+    background-color: #ccc;
+    transform: none;
+    box-shadow: none;
+}
   

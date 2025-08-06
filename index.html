@@ -13,7 +13,13 @@
     
     <input type="text" id="gi" placeholder="기수 (예: 17기 또는 17)" />
     <input type="text" id="name" placeholder="이름" />
-    <button onclick="handleLogin()">로그인</button>
+    <button id="login-btn" onclick="handleLogin()">로그인</button>
+
+    <!-- 로딩 표시 -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">로그인 확인 중...</div>
+    </div>
 
     <!-- 로그인 실패 메시지 표시용 -->
     <p id="error-message" style="color: red; margin-top: 12px; display: none;"></p>

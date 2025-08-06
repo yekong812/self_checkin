@@ -2,6 +2,8 @@ async function handleLogin() {
     const gi = document.getElementById("gi").value.trim();
     const name = document.getElementById("name").value.trim();
     const errorEl = document.getElementById("error-message");
+    const loginBtn = document.getElementById("login-btn");
+    const loadingEl = document.getElementById("loading");
   
     errorEl.style.display = "none";
     errorEl.innerText = "";
@@ -11,6 +13,11 @@ async function handleLogin() {
       errorEl.style.display = "block";
       return;
     }
+  
+    // 로딩 상태 시작
+    loginBtn.disabled = true;
+    loginBtn.textContent = "확인 중...";
+    loadingEl.style.display = "block";
   
     const targetUrl = `https://script.google.com/macros/s/AKfycbwz6Kc9hopwtZDohcRwiLYUtT4hx451lhzmaTmxwI5dskgFRYNdWneHC6bx5Y_l-pOM/exec?action=verifyLoginAndPayment&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
     const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`; // ✅ 프록시 경유
@@ -31,6 +38,11 @@ async function handleLogin() {
       errorEl.innerText = "서버 연결에 실패했습니다.";
       errorEl.style.display = "block";
       console.error(err);
+    } finally {
+      // 로딩 상태 종료
+      loginBtn.disabled = false;
+      loginBtn.textContent = "로그인";
+      loadingEl.style.display = "none";
     }
   }
   
