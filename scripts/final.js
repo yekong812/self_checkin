@@ -18,10 +18,18 @@ window.onload = async () => {
       //   throw new Error("Invalid response type");
       // }
   
-      const data = await res.json();
-  
+            let data;
+      try {
+        data = await res.json();
+      } catch (parseError) {
+        console.error("JSON 파싱 오류:", parseError);
+        showError("서버 응답 형식 오류입니다.");
+        return;
+      }
+
       if (!data.success) {
-        showError("정보를 불러올 수 없습니다.");
+        const errorMessage = data.error || "정보를 불러올 수 없습니다.";
+        showError(errorMessage);
         return;
       }
   
