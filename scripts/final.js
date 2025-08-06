@@ -56,7 +56,7 @@ window.onload = async () => {
         <p><strong>기수:</strong> ${data.gi}</p>
         <p><strong>이름:</strong> ${data.name}</p>
         <p><strong>티셔츠 사이즈:</strong> ${data.shirt}</p>
-        <p><strong>조:</strong> ${hasTeam ? data.team : "미배정"}</p>
+        <p><strong>조:</strong> ${hasTeam ? data.team : "미배정 (조 필요시 스텝에게 얘기해주세요)"}</p>
       `;
       document.getElementById("info").innerHTML = infoText;
   
@@ -64,11 +64,6 @@ window.onload = async () => {
       QRCode.toCanvas(document.getElementById("qrcode"), qrContent, error => {
         if (error) console.error(error);
       });
-  
-      // 조 배정 안 된 경우 안내 메시지 표시
-      if (!hasTeam) {
-        document.getElementById("noTeamMessage").style.display = "block";
-      }
   
       // 로딩 완료 후 콘텐츠 표시
       loadingEl.style.display = "none";
