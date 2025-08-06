@@ -94,16 +94,41 @@ function handleVerifyLoginAndPayment(gi, name) {
 
 function checkPaymentStatus(gi, name, ss) {
   try {
-    const paymentSheet = ss.getSheetByName("회비");
-    if (!paymentSheet) return false;
+    if (!ss) {
+      console.error("스프레드시트 객체가 null입니다");
+      return false;
+    }
     
-    const data = paymentSheet.getDataRange().getValues();
+    const paymentSheet = ss.getSheetByName("회비");
+    if (!paymentSheet) {
+      console.error("회비 시트를 찾을 수 없습니다");
+      return false;
+    }
+    
+    // 더 안전한 데이터 접근
+    const lastRow = paymentSheet.getLastRow();
+    const lastCol = paymentSheet.getLastColumn();
+    
+    if (lastRow === 0 || lastCol === 0) {
+      console.error("회비 시트에 데이터가 없습니다");
+      return false;
+    }
+    
+    const data = paymentSheet.getRange(1, 1, lastRow, lastCol).getValues();
 
     for (let row of data) {
+      if (!row || row.length < 4) continue; // 4열 미만이면 건너뛰기
+      
       const rowGi = normalizeGi(row[0]);
       const rowName = (row[1] + "").trim();
       const status = row[3];
+      
       if (rowGi === gi && rowName === name) {
+        // null, undefined, 빈 문자열인 경우 false 반환
+        if (status === null || status === undefined || status === "") {
+          return false;
+        }
+        // O 또는 o인 경우만 true 반환
         return status === "O" || status === "o";
       }
     }
@@ -134,22 +159,32 @@ function handleGetUserInfo(gi, name) {
       });
     }
     
-    // 데이터 범위 확인
-    let data;
+    // 데이터 범위 확인 - 더 안전한 방법
+    let data = [];
     try {
-      const range = responseSheet.getDataRange();
-      if (!range) {
+      // 시트의 마지막 행과 열 확인
+      const lastRow = responseSheet.getLastRow();
+      const lastCol = responseSheet.getLastColumn();
+      
+      if (lastRow === 0 || lastCol === 0) {
         return jsonResponse({ 
           success: false, 
-          error: "데이터 범위를 찾을 수 없습니다." 
+          error: "시트에 데이터가 없습니다." 
         });
       }
+      
+      // A1부터 마지막 셀까지 데이터 가져오기
+      const range = responseSheet.getRange(1, 1, lastRow, lastCol);
       data = range.getValues();
+      
+      console.log("데이터 행 수:", data.length);
+      console.log("데이터 열 수:", data[0] ? data[0].length : 0);
+      
     } catch (rangeError) {
       console.error("데이터 범위 오류:", rangeError);
       return jsonResponse({ 
         success: false, 
-        error: "데이터를 읽을 수 없습니다." 
+        error: "데이터를 읽을 수 없습니다: " + rangeError.toString() 
       });
     }
     
@@ -157,13 +192,18 @@ function handleGetUserInfo(gi, name) {
     let userInfo = null;
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
+      if (!row || row.length < 4) continue; // 행이 비어있거나 4열 미만이면 건너뛰기
+      
       const rowGi = normalizeGi(row[0]);
       const rowName = (row[1] + "").trim();
+      
+      console.log(`행 ${i}: 기수=${rowGi}, 이름=${rowName}, 찾는값=${gi}, ${name}`);
       
       if (rowGi === gi && rowName === name) {
         userInfo = {
           shirtSize: row[3] || "M" // D열: 티셔츠 사이즈
         };
+        console.log("사용자 찾음:", row);
         break;
       }
     }
@@ -180,13 +220,22 @@ function handleGetUserInfo(gi, name) {
     try {
       const teamSheet = ss.getSheetByName("조편성");
       if (teamSheet) {
-        const teamData = teamSheet.getDataRange().getValues();
-        for (let row of teamData) {
-          const rowGi = normalizeGi(row[0]);
-          const rowName = (row[1] + "").trim();
-          if (rowGi === gi && rowName === name) {
-            team = row[2] || ""; // C열: 조 정보
-            break;
+        const teamLastRow = teamSheet.getLastRow();
+        const teamLastCol = teamSheet.getLastColumn();
+        
+        if (teamLastRow > 0 && teamLastCol > 0) {
+          const teamRange = teamSheet.getRange(1, 1, teamLastRow, teamLastCol);
+          const teamData = teamRange.getValues();
+          
+          for (let row of teamData) {
+            if (!row || row.length < 3) continue;
+            
+            const rowGi = normalizeGi(row[0]);
+            const rowName = (row[1] + "").trim();
+            if (rowGi === gi && rowName === name) {
+              team = row[2] || ""; // C열: 조 정보
+              break;
+            }
           }
         }
       }
@@ -246,4 +295,95 @@ function testGetUserInfo() {
   const result = handleGetUserInfo(testGi, testName);
   console.log("테스트 결과:", result);
   return result;
+}
+
+function testCheckPaymentStatus() {
+  const testGi = "19";
+  const testName = "이은선";
+  
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    console.log("스프레드시트 객체:", ss ? "존재" : "null");
+    
+    if (ss) {
+      const result = checkPaymentStatus(testGi, testName, ss);
+      console.log("회비 확인 결과:", result);
+      return result;
+    } else {
+      console.error("스프레드시트에 접근할 수 없습니다");
+      return false;
+    }
+  } catch (error) {
+    console.error("테스트 오류:", error);
+    return false;
+  }
+}
+
+// 더 간단한 테스트 함수
+function testCheckPaymentStatusSimple() {
+  const testGi = "19";
+  const testName = "이은선";
+  
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    console.log("스프레드시트 객체:", ss ? "존재" : "null");
+    
+    if (!ss) {
+      console.error("스프레드시트에 접근할 수 없습니다");
+      return false;
+    }
+    
+    const paymentSheet = ss.getSheetByName("회비");
+    console.log("회비 시트:", paymentSheet ? "존재" : "null");
+    
+    if (!paymentSheet) {
+      console.error("회비 시트를 찾을 수 없습니다");
+      return false;
+    }
+    
+    const lastRow = paymentSheet.getLastRow();
+    const lastCol = paymentSheet.getLastColumn();
+    console.log("회비 시트 크기:", lastRow, "행 x", lastCol, "열");
+    
+    if (lastRow === 0 || lastCol === 0) {
+      console.error("회비 시트에 데이터가 없습니다");
+      return false;
+    }
+    
+    const data = paymentSheet.getRange(1, 1, lastRow, lastCol).getValues();
+    console.log("회비 데이터 행 수:", data.length);
+    
+    for (let i = 0; i < data.length; i++) {
+      const row = data[i];
+      if (!row || row.length < 4) {
+        console.log(`행 ${i}: 4열 미만, 건너뛰기`);
+        continue;
+      }
+      
+      const rowGi = normalizeGi(row[0]);
+      const rowName = (row[1] + "").trim();
+      const status = row[3];
+      
+      console.log(`행 ${i}: 기수=${rowGi}, 이름=${rowName}, 상태=${status}, 찾는값=${testGi}, ${testName}`);
+      
+             if (rowGi === testGi && rowName === testName) {
+         // null, undefined, 빈 문자열인 경우 false 반환
+         if (status === null || status === undefined || status === "") {
+           console.log("사용자 찾음! 회비 미납부 (null/empty)");
+           return false;
+         }
+         // O 또는 o인 경우만 true 반환
+         const result = status === "O" || status === "o";
+         console.log("사용자 찾음! 회비 납부:", result);
+         return result;
+       }
+    }
+    
+    console.log("사용자를 찾을 수 없습니다");
+    return false;
+    
+  } catch (error) {
+    console.error("테스트 오류:", error);
+    return false;
+  }
 } 
