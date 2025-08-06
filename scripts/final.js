@@ -2,11 +2,19 @@ window.onload = async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const gi = urlParams.get("gi");
     const name = urlParams.get("name");
+    const loadingEl = document.getElementById("loading");
+    const infoEl = document.getElementById("info");
+    const qrcodeEl = document.getElementById("qrcode");
   
     if (!gi || !name) {
       showError("정보를 불러올 수 없습니다.");
       return;
     }
+  
+    // 로딩 상태 시작
+    loadingEl.style.display = "block";
+    infoEl.style.display = "none";
+    qrcodeEl.style.display = "none";
   
     try {
       const targetUrl = `https://script.google.com/macros/s/AKfycbwz6Kc9hopwtZDohcRwiLYUtT4hx451lhzmaTmxwI5dskgFRYNdWneHC6bx5Y_l-pOM/exec?action=getUserInfo&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
@@ -41,27 +49,38 @@ window.onload = async () => {
         return;
       }
   
-      if (!data.team || data.team.trim() === "") {
-        document.getElementById("noTeamMessage").style.display = "block";
-        return;
-      }
-  
+      // 조 배정 여부 확인
+      const hasTeam = data.team && data.team.trim() !== "";
+      
       const infoText = `
         <p><strong>기수:</strong> ${data.gi}</p>
         <p><strong>이름:</strong> ${data.name}</p>
         <p><strong>티셔츠 사이즈:</strong> ${data.shirt}</p>
-        <p><strong>조:</strong> ${data.team}</p>
+        <p><strong>조:</strong> ${hasTeam ? data.team : "미배정"}</p>
       `;
       document.getElementById("info").innerHTML = infoText;
   
-      const qrContent = `기수: ${data.gi}, 이름: ${data.name}, 조: ${data.team}, 티셔츠: ${data.shirt}`;
+      const qrContent = `기수: ${data.gi}, 이름: ${data.name}, 조: ${hasTeam ? data.team : "미배정"}, 티셔츠: ${data.shirt}`;
       QRCode.toCanvas(document.getElementById("qrcode"), qrContent, error => {
         if (error) console.error(error);
       });
   
+      // 조 배정 안 된 경우 안내 메시지 표시
+      if (!hasTeam) {
+        document.getElementById("noTeamMessage").style.display = "block";
+      }
+  
+      // 로딩 완료 후 콘텐츠 표시
+      loadingEl.style.display = "none";
+      infoEl.style.display = "block";
+      qrcodeEl.style.display = "block";
+  
     } catch (err) {
       console.error(err);
       showError("서버 응답 오류입니다.");
+    } finally {
+      // 로딩 상태 종료
+      loadingEl.style.display = "none";
     }
   };
   
