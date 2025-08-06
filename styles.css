@@ -148,13 +148,13 @@ input:focus {
 
 /* 회비 안내 박스 */
 div[style*="background-color: #fff7e6"] {
-    background-color: #fff7e6 !important;
+    background-color: transparent !important;
     padding: 15px !important;
     border-radius: 10px !important;
     font-size: 14px !important;
     line-height: 1.6 !important;
     margin: 15px 0 !important;
-    border: 1px solid #fbb757;
+    border: 2px solid #fbb757;
 }
 
 /* 구분선 */
@@ -167,12 +167,13 @@ hr {
 
 /* 코드 스타일 */
 code {
-    background-color: #f1f3f4;
+    background-color: transparent;
     padding: 4px 8px;
     border-radius: 6px;
     font-family: 'Courier New', monospace;
     font-size: 14px;
     color: #d73a49;
+    border: 1px solid #fbb757;
 }
 
 /* 반응형 디자인 */
