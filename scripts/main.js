@@ -3,7 +3,6 @@ async function handleLogin() {
     const name = document.getElementById("name").value.trim();
     const errorEl = document.getElementById("error-message");
   
-    // 에러 메시지 초기화
     errorEl.style.display = "none";
     errorEl.innerText = "";
   
@@ -14,14 +13,13 @@ async function handleLogin() {
     }
   
     const targetUrl = `https://script.google.com/macros/s/AKfycbz6ergFsT1BEmYxGZVJW7f8ucYyONFptyAFYzA0ppDSLoAJO-BlHBkBrtmCKnbt_qeH/exec?action=verifyLoginAndPayment&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`; // ✅ 프록시 경유
   
     try {
       const res = await fetch(proxyUrl);
       const data = await res.json();
   
       if (!data.success) {
-        // 실패 메시지 표시
         errorEl.innerText = "입력하신 정보가 등록되어 있지 않습니다.";
         errorEl.style.display = "block";
       } else if (data.paid) {
