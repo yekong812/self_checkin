@@ -3,7 +3,7 @@
     const gi = params.get("gi");
     const name = params.get("name");
   
-    const url = `https://script.google.com/macros/s/웹앱-배포-URL/exec?action=getUserInfo&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
+    const url = `https://script.google.com/macros/s/AKfycbz6ergFsT1BEmYxGZVJW7f8ucYyONFptyAFYzA0ppDSLoAJO-BlHBkBrtmCKnbt_qeH/exec?action=getUserInfo&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
     const res = await fetch(url);
     const data = await res.json();
   

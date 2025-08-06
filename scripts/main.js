@@ -7,7 +7,7 @@ async function handleLogin() {
       return;
     }
   
-    const url = `https://script.google.com/macros/s/웹앱-배포-URL/exec?action=verifyLoginAndPayment&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
+    const url = `https://script.google.com/macros/s/AKfycbz6ergFsT1BEmYxGZVJW7f8ucYyONFptyAFYzA0ppDSLoAJO-BlHBkBrtmCKnbt_qeH/exec?action=verifyLoginAndPayment&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
     const res = await fetch(url);
     const data = await res.json();
   
