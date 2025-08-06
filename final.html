@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>체크인 완료</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>최종 안내</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <div class="logo">Declaration</div>
-    <h2>체크인 완료</h2>
-    <p>아래 정보를 확인해주세요.</p>
-    <div id="userInfo" style="white-space: pre-line; font-size: 18px;"></div>
-    <canvas id="qrcode" style="margin-top: 20px;"></canvas>
+    <h1>환영합니다!</h1>
+    <div id="info" class="info"></div>
+    <canvas id="qrcode"></canvas>
+    <p id="noTeamMessage" class="warning" style="display:none;">조에 배정되지 않았습니다. 접수대 방문 부탁드립니다.</p>
+    <button onclick="goHome()">처음으로</button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
-  <script src="scripts/final.js"></script>
+  <script src="final.js"></script>
 </body>
 </html>

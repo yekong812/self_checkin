@@ -28,6 +28,13 @@ body {
     font-size: 20px;
     font-style: italic;
   }
+
+  .warning {
+    color: red;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  
   
   /* 버튼 디자인 */
   button {

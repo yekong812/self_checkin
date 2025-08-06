@@ -1,37 +1,50 @@
-(async function () {
-    const params = new URLSearchParams(window.location.search);
-    const gi = params.get("gi");
-    const name = params.get("name");
+window.onload = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const gi = urlParams.get("gi");
+    const name = urlParams.get("name");
   
     if (!gi || !name) {
-      document.getElementById("userInfo").innerText = "잘못된 접근입니다.";
+      document.getElementById("info").innerText = "정보를 불러올 수 없습니다.";
       return;
     }
   
-    // 실제 GAS URL
-    const targetUrl = `https://script.google.com/macros/s/AKfycbz6ergFsT1BEmYxGZVJW7f8ucYyONFptyAFYzA0ppDSLoAJO-BlHBkBrtmCKnbt_qeH/exec?action=getUserInfo&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
-  
-    // 프록시로 감싸기
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
-  
     try {
-      const res = await fetch(proxyUrl);
+      const apiUrl = `https://corsproxy.io/?https://script.google.com/macros/s/AKfycbz6ergFsT1BEmYxGZVJW7f8ucYyONFptyAFYzA0ppDSLoAJO-BlHBkBrtmCKnbt_qeH/exec?action=getUserInfo&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
+      const res = await fetch(apiUrl);
       const data = await res.json();
   
-      if (!data || !data.team || !data.shirt) {
-        document.getElementById("userInfo").innerText = "정보를 불러올 수 없습니다.";
+      if (!data.success) {
+        document.getElementById("info").innerText = "정보를 불러올 수 없습니다.";
         return;
       }
   
-      const infoText = `이름: ${data.name}\n기수: ${data.gi}\n조: ${data.team}\n티셔츠: ${data.shirt}`;
-      document.getElementById("userInfo").innerText = infoText;
+      // 조편성 정보가 없는 경우
+      if (!data.team || data.team.trim() === "") {
+        document.getElementById("noTeamMessage").style.display = "block";
+        return;
+      }
   
-      QRCode.toCanvas(document.getElementById('qrcode'), infoText, function (error) {
+      // 조편성 정보가 있는 경우
+      const infoText = `
+        <p><strong>기수:</strong> ${data.gi}</p>
+        <p><strong>이름:</strong> ${data.name}</p>
+        <p><strong>티셔츠 사이즈:</strong> ${data.shirt}</p>
+        <p><strong>조:</strong> ${data.team}</p>
+      `;
+      document.getElementById("info").innerHTML = infoText;
+  
+      const qrContent = `기수: ${data.gi}, 이름: ${data.name}, 조: ${data.team}, 티셔츠: ${data.shirt}`;
+      QRCode.toCanvas(document.getElementById("qrcode"), qrContent, error => {
         if (error) console.error(error);
       });
+  
     } catch (err) {
-      document.getElementById("userInfo").innerText = "서버 응답 오류입니다.";
+      document.getElementById("info").innerText = "서버 연결에 실패했습니다.";
       console.error(err);
     }
-  })();
+  };
+  
+  function goHome() {
+    window.location.href = "index.html";
+  }
   
