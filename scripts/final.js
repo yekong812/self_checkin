@@ -20,9 +20,16 @@ window.onload = async () => {
   
             let data;
       try {
-        data = await res.json();
+        // 응답 텍스트를 먼저 확인
+        const responseText = await res.text();
+        console.log("서버 응답 텍스트:", responseText);
+        
+        // JSON 파싱 시도
+        data = JSON.parse(responseText);
       } catch (parseError) {
         console.error("JSON 파싱 오류:", parseError);
+        console.error("응답 상태:", res.status);
+        console.error("응답 헤더:", res.headers);
         showError("서버 응답 형식 오류입니다.");
         return;
       }
