@@ -12,7 +12,7 @@ async function handleLogin() {
       return;
     }
   
-    const targetUrl = `https://script.google.com/macros/s/AKfycbz6ergFsT1BEmYxGZVJW7f8ucYyONFptyAFYzA0ppDSLoAJO-BlHBkBrtmCKnbt_qeH/exec?action=verifyLoginAndPayment&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
+    const targetUrl = `https://script.google.com/macros/s/AKfycbwz6Kc9hopwtZDohcRwiLYUtT4hx451lhzmaTmxwI5dskgFRYNdWneHC6bx5Y_l-pOM/exec?action=verifyLoginAndPayment&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
     const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`; // ✅ 프록시 경유
   
     try {
