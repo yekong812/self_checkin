@@ -4,27 +4,31 @@ window.onload = async () => {
     const name = urlParams.get("name");
   
     if (!gi || !name) {
-      document.getElementById("info").innerText = "정보를 불러올 수 없습니다.";
+      showError("정보를 불러올 수 없습니다.");
       return;
     }
   
     try {
       const apiUrl = `https://corsproxy.io/?https://script.google.com/macros/s/AKfycbz6ergFsT1BEmYxGZVJW7f8ucYyONFptyAFYzA0ppDSLoAJO-BlHBkBrtmCKnbt_qeH/exec?action=getUserInfo&gi=${encodeURIComponent(gi)}&name=${encodeURIComponent(name)}`;
       const res = await fetch(apiUrl);
+  
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Invalid response type");
+      }
+  
       const data = await res.json();
   
       if (!data.success) {
-        document.getElementById("info").innerText = "정보를 불러올 수 없습니다.";
+        showError("정보를 불러올 수 없습니다.");
         return;
       }
   
-      // 조편성 정보가 없는 경우
       if (!data.team || data.team.trim() === "") {
         document.getElementById("noTeamMessage").style.display = "block";
         return;
       }
   
-      // 조편성 정보가 있는 경우
       const infoText = `
         <p><strong>기수:</strong> ${data.gi}</p>
         <p><strong>이름:</strong> ${data.name}</p>
@@ -39,12 +43,15 @@ window.onload = async () => {
       });
   
     } catch (err) {
-      document.getElementById("info").innerText = "서버 연결에 실패했습니다.";
       console.error(err);
+      showError("서버 응답 오류입니다.");
     }
   };
+  
+  function showError(message) {
+    document.getElementById("info").innerHTML = `<p class="warning">${message}</p>`;
+  }
   
   function goHome() {
     window.location.href = "index.html";
   }
-  
