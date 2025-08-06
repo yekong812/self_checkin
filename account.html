@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>회비 미납 안내</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="logo">Declaration</div>
+    <h2>회비 미납 안내</h2>
+    <p>아직 회비를 납부하지 않으셨어요.<br>현장에서 납부 후 최종 체크인을 완료해주세요.</p>
+
+    <hr style="margin: 24px 0;">
+
+    <div style="background-color: #fff7e6; padding: 16px; border-radius: 12px; font-size: 16px;">
+      <strong>💳 회비 납부 안내</strong><br><br>
+      <b>카카오뱅크</b><br>
+      <code>3333-23-0769845 (정선우)</code><br><br>
+      <b>입금자명:</b> 기수+이름 (예: <code>19이은선</code>)
+    </div>
+
+    <button onclick="goBack()">다시 로그인하기</button>
+  </div>
+
+  <script>
+    function goBack() {
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

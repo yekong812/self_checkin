@@ -1,0 +1,58 @@
+/* 전체 배경 및 기본 스타일 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
+    background-color: #f5f1e6; /* 연한 베이지 */
+    color: #333;
+  }
+  
+  /* 메인 컨테이너 박스 */
+  .container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 40px;
+    background-color: #fffef8; /* 아주 연한 배경 */
+    border: 12px solid #fbb757; /* 이미지 테두리 오렌지 */
+    border-radius: 24px;
+    position: relative;
+  }
+  
+  /* 좌측 상단 Declaration 로고 */
+  .logo {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    font-weight: bold;
+    color: #e85d2a; /* 이미지 상단 글자 색상 */
+    font-size: 20px;
+    font-style: italic;
+  }
+  
+  /* 버튼 디자인 */
+  button {
+    background-color: #fbb757;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  button:hover {
+    background-color: #f89b24;
+  }
+  
+  /* 입력 필드 */
+  input {
+    padding: 10px;
+    margin: 8px 0;
+    width: 100%;
+    border: 2px solid #fbb757;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
