@@ -63,17 +63,11 @@ window.onload = async () => {
       // 조 배정 여부만 QR 코드에 포함 (조 이름은 제외)
       const teamStatus = hasTeam ? "배정완료" : "미배정";
       
-      // QR 코드용 데이터 객체 생성
-      const qrData = {
-        기수: data.gi,
-        이름: data.name,
-        조: teamStatus,
-        티셔츠: data.shirt
-      };
+      // 텍스트 형식으로 QR 코드 데이터 생성
+      const qrText = `기수: ${data.gi}, 이름: ${data.name}, 조: ${teamStatus}, 티셔츠: ${data.shirt}`;
       
-      // JSON을 Base64로 인코딩
-      const jsonString = JSON.stringify(qrData);
-      const encodedData = btoa(unescape(encodeURIComponent(jsonString)));
+      // 텍스트를 Base64로 인코딩
+      const encodedData = btoa(unescape(encodeURIComponent(qrText)));
       
       // QR 코드 생성
       const qrContent = `DATA:${encodedData}`;
