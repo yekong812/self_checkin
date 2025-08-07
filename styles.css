@@ -1,8 +1,16 @@
+/* 폰트 정의 */
+@font-face {
+    font-family: 'GmarketSans';
+    src: url('./fonts/GmarketSansTTFMedium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* 전체 배경 및 기본 스타일 */
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
+    font-family: 'GmarketSans', 'Segoe UI', 'Noto Sans KR', sans-serif;
     background-color: #f5f1e6; /* 연한 베이지 */
     color: #333;
     min-height: 100vh;
