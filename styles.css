@@ -24,8 +24,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* 세로모드 강제 */
-    orientation: portrait;
+    /* 세로모드 강제 - orientation 속성 제거 */
 }
 
 /* 세로모드 강제 */
